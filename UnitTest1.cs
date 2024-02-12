@@ -1,4 +1,4 @@
-#nullable enable
+#nullable disable
 namespace AbstractFabric;
 
 public class LoggerTests

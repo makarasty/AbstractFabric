@@ -1,13 +1,13 @@
-public abstract class Logger
+public interface ILogger
 {
-	public abstract void Log(string message);
+	void Log(string message);
 }
 
-public class FormatLogger : Logger
+public class FormatLogger : ILogger
 {
 	public string? Format { get; set; }
 
-	public override void Log(string message)
+	public void Log(string message)
 	{
 		if (message == null)
 			throw new ArgumentNullException(nameof(message));
@@ -19,11 +19,11 @@ public class FormatLogger : Logger
 	}
 }
 
-public class ColorLogger : Logger
+public class ColorLogger : ILogger
 {
 	public ConsoleColor? Color { get; set; }
 
-	public override void Log(string message)
+	public void Log(string message)
 	{
 		if (message == null)
 			throw new ArgumentNullException(nameof(message));
@@ -37,16 +37,16 @@ public class ColorLogger : Logger
 	}
 }
 
-public abstract class LoggerFactory
+public interface ILoggerFactory
 {
-	public abstract Logger CreateLogger();
+	ILogger CreateLogger();
 }
 
-public class FormatLoggerFactory : LoggerFactory
+public class FormatLoggerFactory : ILoggerFactory
 {
 	public string? Format { get; set; }
 
-	public override Logger CreateLogger()
+	public ILogger CreateLogger()
 	{
 		if (Format == null)
 			throw new InvalidOperationException("Format not specified");
@@ -55,11 +55,11 @@ public class FormatLoggerFactory : LoggerFactory
 	}
 }
 
-public class ColorLoggerFactory : LoggerFactory
+public class ColorLoggerFactory : ILoggerFactory
 {
 	public ConsoleColor? Color { get; set; }
 
-	public override Logger CreateLogger()
+	public ILogger CreateLogger()
 	{
 		if (!Color.HasValue)
 			throw new InvalidOperationException("Color not specified");
@@ -70,12 +70,12 @@ public class ColorLoggerFactory : LoggerFactory
 
 // 💮 Why not combine them together?
 
-public class CombinedLogger : Logger
+public class CombinedLogger : ILogger
 {
 	public string? Format { get; set; }
 	public ConsoleColor? Color { get; set; }
 
-	public override void Log(string message)
+	public void Log(string message)
 	{
 		if (message == null)
 			throw new ArgumentNullException(nameof(message));
@@ -92,12 +92,12 @@ public class CombinedLogger : Logger
 	}
 }
 
-public class CombinedLoggerFactory : LoggerFactory
+public class CombinedLoggerFactory : ILoggerFactory
 {
 	public string? Format { get; set; }
 	public ConsoleColor? Color { get; set; }
 
-	public override Logger CreateLogger()
+	public ILogger CreateLogger()
 	{
 		if (Format == null)
 			Format = "{0}";
